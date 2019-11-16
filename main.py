@@ -199,7 +199,7 @@ def round_time(date):
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     plt.style.use('ggplot')
-    dataset = pd.read_csv("10" + ".txt", sep="\s*;\s*", decimal=",")
+    dataset = pd.read_csv("4" + ".txt", sep="\s*;\s*", decimal=",")
     x = list()
     x.append(dataset.iloc[:, 0].values)
     x.append(dataset.iloc[:, 2].values.astype(float))
@@ -322,7 +322,7 @@ if __name__ == '__main__':
                                                    activation='relu',
                                                    max_iter=10000,
                                                    tol=0.0000001,
-                                                   learning_rate_init=0.0000001,
+                                                   learning_rate_init=0.000001,
                                                    learning_rate='adaptive',
                                                    batch_size=365 * 24,
                                                    alpha=0.00001,
@@ -340,7 +340,7 @@ if __name__ == '__main__':
                                     activation='relu',
                                     max_iter=10000,
                                     tol=0.0000001,
-                                    learning_rate_init=0.0000001,
+                                    learning_rate_init=0.000001,
                                     learning_rate='adaptive',
                                     batch_size=365 * 24,
                                     alpha=0.00001,
