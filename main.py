@@ -20,6 +20,16 @@ x_end = pd.to_datetime('01.01.2019 00:00:00', errors='raise', format='%d.%m.%Y %
 x_future = pd.to_datetime('01.01.2021 00:00:00', errors='raise', format='%d.%m.%Y %H:%M:%S')
 
 
+def save_predicted_data(predicted_data, model_name):
+    print("Хотите сохранить будущие значения расхода в файл?(0; 1)")
+    user_enter = input()
+    if user_enter == '1':
+        print("Введит название файла:")
+        file_name = input()
+        with open('predicted_data/' + model_name + '_' + file_name + '.txt', 'w') as f:
+            for data in predicted_data:
+                f.write(str(data) + '\n')
+
 def save_model(model, file_name):
     pickle.dump(model, open(file_name, 'wb'))
 
@@ -63,7 +73,7 @@ def regression(x_graph, x_train_reg, x_test_reg, y_train_reg, y_test_reg, model_
     if user_enter == '1':
         print("Введит название файла:")
         file_name = input()
-        model_reg = load_model(type_model + file_name + ".sav")
+        model_reg = load_model(type_model + "\\" + type_model + file_name + ".sav")
     else:
         print("Модель обучается...")
         model_reg.fit(scaler_x.transform(x_train_reg), y_train_reg)
@@ -73,7 +83,7 @@ def regression(x_graph, x_train_reg, x_test_reg, y_train_reg, y_test_reg, model_
     predicted_y = model_reg.predict(scaler_x.transform(x_test_reg))
     print("Среднеквадратическая ошибка (MSE): {0}.".format(metrics.mean_squared_error(expected_y, predicted_y)))
     print("Среднеквадратичная ошибка (R^2): {0}.".format(metrics.r2_score(expected_y, predicted_y)))
-
+    print(model_reg.loss_)
     plt.title(title)
     plt.plot(x_graph, predicted_y, 'r-', label='предсказание')
     plt.ylabel('Расход')
@@ -158,7 +168,9 @@ def regression(x_graph, x_train_reg, x_test_reg, y_train_reg, y_test_reg, model_
         if user_enter == '1':
             print("Введит название файла:")
             file_name = input()
-            save_model(model_reg, type_model + file_name + ".sav")
+            save_model(model_reg,type_model + "\\" + type_model + file_name + ".sav")
+
+    save_predicted_data(predicted_y, type_model)
 
 def regressionTemperatures(x_train_reg, y_train_reg, future_dates_periodic, monthsStart, nameMonts):
     nameMonts.append(nameMonts[0])
@@ -199,7 +211,7 @@ def round_time(date):
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     plt.style.use('ggplot')
-    dataset = pd.read_csv("4" + ".txt", sep="\s*;\s*", decimal=",")
+    dataset = pd.read_csv("DB\\5" + ".txt", sep="\s*;\s*", decimal=",")
     x = list()
     x.append(dataset.iloc[:, 0].values)
     x.append(dataset.iloc[:, 2].values.astype(float))
