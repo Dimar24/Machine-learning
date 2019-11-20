@@ -81,9 +81,18 @@ def regression(x_graph, x_train_reg, x_test_reg, y_train_reg, y_test_reg, model_
     expected_y = y_test_reg
     model_reg.out_activation_ = 'relu'
     predicted_y = model_reg.predict(scaler_x.transform(x_test_reg))
+
+    max = 0
+    for i in range(len(y_test_reg)):
+        err = pow(y_test_reg[i] - predicted_y[i], 2)
+        if err > max:
+            max = err
     print("Среднеквадратическая ошибка (MSE): {0}.".format(metrics.mean_squared_error(expected_y, predicted_y)))
     print("Среднеквадратичная ошибка (R^2): {0}.".format(metrics.r2_score(expected_y, predicted_y)))
-    print(model_reg.loss_)
+    print("Показатель потери обучения модели: {0}".format(model_reg.loss_))
+    print("MSE процент: {0}".format((metrics.mean_squared_error(expected_y, predicted_y)/max)*100))
+
+
     plt.title(title)
     plt.plot(x_graph, predicted_y, 'r-', label='предсказание')
     plt.ylabel('Расход')
